@@ -263,4 +263,19 @@
 			 and product_period_key = #{productPeriodKey} 
 		</if>
 	</select>
+	<!--forupdate查询-->
+	<select id="selectForUpdate" resultMap="SeckillProducts">
+		SELECT
+		<include refid="Base_Column_List"/>
+		from seckill_products
+		where id = #{id}
+		for update
+	</select>
+	<!--update-->
+	<update id="updateStockByOptimistic">
+		UPDATE seckill_products
+		SET saled = saled + 1
+		WHERE id = #{id}
+		  <![CDATA[and saled < `count`]]>
+	</update>
 </mapper>

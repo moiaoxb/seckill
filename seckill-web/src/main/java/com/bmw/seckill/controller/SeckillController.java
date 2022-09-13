@@ -38,5 +38,51 @@ public class SeckillController {
         return seckillService.sOrder(req);
     }
 
+    /**
+     * 秒杀下单（避免超卖问题——JVM锁）
+     */
+    @RequestMapping(value = "/synchronized/order")
+    public synchronized BaseResponse synchronizedOrder(@Valid @RequestBody BaseRequest<SeckillReq> request) {
+        CommonWebUser user = WebUserUtil.getLoginUser();
+        if (Objects.isNull(user)) {
+            return BaseResponse.error(ErrorMessage.LOGIN_ERROR);
+        }
+        SeckillReq req = request.getData();
+        req.setUserId(user.getId());
+        return seckillService.sOrder(req);
+    }
+
+    /**
+     * 秒杀下单（避免超卖问题——悲观锁）
+     */
+    @RequestMapping(value = "/pessimistic/order")
+    public BaseResponse pOrder(@Valid @RequestBody BaseRequest<SeckillReq> request) {
+        CommonWebUser user = WebUserUtil.getLoginUser();
+        if (Objects.isNull(user)) {
+            return BaseResponse.error(ErrorMessage.LOGIN_ERROR);
+        }
+        SeckillReq req = request.getData();
+        req.setUserId(user.getId());
+        return seckillService.pOrder(req);
+    }
+
+    /**
+     * 秒杀下单（避免超卖问题——乐观锁）
+     */
+    @RequestMapping(value = "/optimistic/order")
+    public BaseResponse oOrder(@Valid @RequestBody BaseRequest<SeckillReq> request) {
+        try {
+            CommonWebUser user = WebUserUtil.getLoginUser();
+            if (Objects.isNull(user)) {
+                return BaseResponse.error(ErrorMessage.LOGIN_ERROR);
+            }
+            SeckillReq req = request.getData();
+            req.setUserId(user.getId());
+            return seckillService.oOrder(req);
+        } catch (Exception e) {
+            log.error("===[秒杀异常！]===", e);
+        }
+        return BaseResponse.error(ErrorMessage.SYS_ERROR);
+    }
 
 }

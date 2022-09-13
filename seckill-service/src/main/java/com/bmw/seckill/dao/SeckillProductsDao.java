@@ -50,4 +50,17 @@ public interface SeckillProductsDao {
      **/
     List<SeckillProducts> list(SeckillProducts record);
 
+    /**
+     * 根据productId锁定记录
+     */
+    SeckillProducts selectForUpdate(Long id);
+
+    /**
+     * 乐观锁的方式扣减库存
+     *
+     * @param productId
+     * @return
+     */
+    int updateStockByOptimistic(Long productId);
+
 }

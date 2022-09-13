@@ -12,6 +12,7 @@ public enum ErrorMessage {
     SYS_ERROR(10000, "系统开小差了,稍后再试"),
     PARAM_ERROR(10001, "参数错误"),
 
+
     /**
      * admin的login相关参数.
      */
@@ -30,6 +31,7 @@ public enum ErrorMessage {
     STOCK_NOT_ENOUGH(20001, "库存不足！"),
     REPEAT_ORDER_ERROR(20002, "不能重复下单！"),
     SECKILL_NOT_START(20003, "秒杀活动还没开始！"),
+    SECKILL_FAILED(20004, "秒杀失败！！"),
 
     /**
      * user相关error.
